@@ -1,5 +1,5 @@
 import socket
-from conf.readConf import load_data_server
+from services.conf.readConf import load_data_server
 
 
 def initialize_socket_server():
