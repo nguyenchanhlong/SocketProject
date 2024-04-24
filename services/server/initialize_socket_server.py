@@ -1,11 +1,10 @@
 import socket
-from conf.readConf import load_data_server
+from settings import settings
 
 
 def initialize_socket_server():
-    host, port = load_data_server("../conf/config.json")
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as socket_server:
-        socket_server.bind((host, port))
+        socket_server.bind((settings.SERVER_HOST, settings.SERVER_PORT))
         socket_server.listen(2)
         """
             connect has the structure {laddr=('127.0.0.1', 65432)}, this is the location of server.
