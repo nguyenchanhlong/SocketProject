@@ -1,5 +1,5 @@
 from pymongo.collection import Collection
-from api.database_connection import mongo_connection
+from database_connection import mongo_connection
 from settings import settings
 
 

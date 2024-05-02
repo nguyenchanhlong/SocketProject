@@ -1,4 +1,4 @@
-from utils.auth_db_conn import auth_connected
+from api.utils.AuthDbConn import auth_connected
 
 
 class AuthHandle:
@@ -9,7 +9,7 @@ class AuthHandle:
     def db_con_auth():
         return auth_connected.connect_collection()
 
-    def getAccessToken(self):
+    def getAccessToken(self):  # Remove @staticmethod decorator
         auth_collection = AuthHandle.db_con_auth()
-        token = auth_collection.find_one({'accessToken': self.accessToken})
+        token = auth_collection.find_one({'authToken': self.accessToken})
         return token

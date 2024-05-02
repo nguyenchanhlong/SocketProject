@@ -1,5 +1,4 @@
-from settings import settings
-from utils.user_db_conn import user_connected
+from api.utils.UserDbConn import user_connected
 
 
 class UserHandle:
