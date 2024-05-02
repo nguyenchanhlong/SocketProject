@@ -1,11 +1,10 @@
 import socket
-from conf.readConf import load_data_server
+from settings import settings
 
 
 def initialize_socket_client():
-    host, port = load_data_server("../conf/config.json")
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as socket_client:
-        socket_client.connect((host, port))
+        socket_client.connect((settings.SERVER_HOST, settings.SERVER_PORT))
         message = input(" --> ")
         while message.lower().strip() != 'quit':
             socket_client.send(message.encode())
