@@ -1,4 +1,4 @@
-from api.utils.AuthDbConn import auth_connected
+from api.utils.DbConn import auth_connected
 
 
 class AuthHandle:
