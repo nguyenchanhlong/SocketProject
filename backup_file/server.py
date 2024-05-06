@@ -21,7 +21,6 @@ class SocketServer:
         self.server_socket.listen(5)
         print("Server is listening for connections...")
         self.clients = []
-        self.nicknames = []
 
     def handle_client(self, client_socket, address):
         print(f"Connected to {address}")
@@ -35,27 +34,17 @@ class SocketServer:
                         self.clients.remove((client_socket, address))
                         break
                     print(f"Received from {address}: {data}")
-                    nickname = self.send_and_receive_nickname(client_socket)
-
-                    self.send_to_other_clients(client_socket, data, nickname)
+                    self.send_to_other_clients(client_socket, data)
             except Exception as e:
                 print(f"Error occurred with {address}: {e}")
                 self.clients.remove((client_socket, address))
 
-    def send_and_receive_nickname(self, client_socket):
-        client_socket.send("nickname".encode())
-        nickname = client_socket.recv(1024).decode()
-        self.nicknames.append(nickname)
-        print('Nickname of the client is {}'.format(nickname))
-        client_socket.send("Connected to the server!".encode('utf-8'))
-        return nickname
-
-    def send_to_other_clients(self, sender_socket, message, nickname):
+    def send_to_other_clients(self, sender_socket, message):
         for client_socket, client_address in self.clients:
             if client_socket != sender_socket:
                 try:
                     # Convert the tuple to a string and then encode
-                    client_address_str = f"{nickname}:{message}"
+                    client_address_str = f"{message}:{client_address[1]}"
                     client_socket.sendall(client_address_str.encode())
                 except Exception as e:
                     print(f"Error sending to {client_address}: {e}")

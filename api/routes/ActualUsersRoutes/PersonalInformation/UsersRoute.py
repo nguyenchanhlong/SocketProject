@@ -16,8 +16,8 @@ parent_directory = os.path.abspath(os.path.join(current_directory, '../../../../
 # Add the parent directory to the Python path
 sys.path.append(parent_directory)
 
-from api.models.UserModels import UserProperty
-from api.models.AuthModels import AuthProperty
+from api.models.ActualUserModels.UserModels import UserProperty
+from api.models.AuthenticationModels.AuthModels import AuthProperty
 from api.handlers.ActualUserHandler.UserHandle import UserHandle
 from api.handlers.AuthenticationHandler.AuthHandle import AuthHandle
 

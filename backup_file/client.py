@@ -55,9 +55,9 @@ class SocketClient:
                     if ":" in data:
                         address_parts = data.split(":")
                         if len(address_parts) == 2:
-                            nickname = address_parts[0].strip()
-                            message = address_parts[1].strip()
-                            print("Received from user ({}): {}".format(nickname, message))
+                            port_number = address_parts[1].strip()
+                            message = address_parts[0].strip()
+                            print("Received from user ({}): {}".format(port_number, message))
 
             except Exception as e:
                 print("Error receiving message:", e)
