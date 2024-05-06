@@ -23,8 +23,8 @@ from api.handlers.AuthenticationHandler.AuthHandle import AuthHandle
 
 from settings import settings
 
+app = Flask(__name__)
 
-# ...
 
 # Helper function to convert ObjectId to string
 def object_id_converter(o):
@@ -33,10 +33,7 @@ def object_id_converter(o):
     raise TypeError(f"Object of type {o.__class__.__name__} is not JSON serializable")
 
 
-app = Flask(__name__)
-
-
-def userRoutes():
+def user_routes():
     @app.route('/signup', methods=['POST'])
     def signup():
         data = request.json
@@ -106,5 +103,5 @@ def userRoutes():
 
 
 if __name__ == "__main__":
-    app = userRoutes()
+    app = user_routes()
     app.run(debug=True)
