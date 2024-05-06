@@ -28,13 +28,13 @@ class SocketClient:
         self.available_clients = {}  # Dictionary to store available clients (username: SocketClient object)
 
     @staticmethod
-    def auth_token(accessToken):
-        auth_token = AuthHandle(accessToken).getAccessToken()
+    def auth_token(access_token):
+        auth_token = AuthHandle(access_token).getAccessToken()
 
         while True:
             try:
-                if auth_token['authToken'] == accessToken:
-                    token_bytes = accessToken.encode('utf-8')
+                if auth_token['authToken'] == access_token:
+                    token_bytes = access_token.encode('utf-8')
                     if not token_bytes:
                         print("Wrong structure of Access Token!!! Please check your token and try again.")
                     else:
@@ -77,12 +77,12 @@ class SocketClient:
 
     def list_clients(self):
         print("Available clients:")
-        for username, client in self.available_clients.items():
+        for username in self.available_clients.items():
             print(username)
 
     def start(self):
-        accessToken = input("Please input the Access Token: ")
-        token = SocketClient.auth_token(accessToken=accessToken)
+        access_token = input("Please input the Access Token: ")
+        token = SocketClient.auth_token(access_token=access_token)
         if token[1] == "Authenticated, login successful!!!":
             self.username = token[0]['sub'].split()[0]
             print("Authenticated, login successful to username: {}".format(self.username))
