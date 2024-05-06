@@ -84,7 +84,7 @@ def user_routes():
             encoded_data = jwt.encode(payload=claims,
                                       key=settings.AUTH_SECRET_KEY,
                                       algorithm="HS256")
-            auth_token = AuthProperty(authToken=encoded_data)
+            auth_token = AuthProperty(auth_token=encoded_data)
             auth_token_dict = auth_token.to_dict()
             # Insert the new auth into the collection and get the insert auth
             insert_auth = auth_collection.insert_one(auth_token_dict)
