@@ -29,7 +29,7 @@ class SocketClient:
 
     @staticmethod
     def auth_token(access_token):
-        auth_token = AuthHandle(access_token).getAccessToken()
+        auth_token = AuthHandle(access_token).get_access_token()
 
         while True:
             try:
