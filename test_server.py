@@ -1,11 +1,11 @@
 import threading
 import socket
 
-host = 'localhost'
-port = 55555
+from settings import settings
+
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind((host, port))
+server.bind((settings.SERVER_HOST, settings.SERVER_PORT))
 server.listen()
 
 clients = []

@@ -1,9 +1,11 @@
 import threading
 import socket
 
+from settings import settings
+
 nickname = input("Enter your nickname: ")
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(('localhost', 55555))
+client.connect((settings.SERVER_HOST, settings.SERVER_PORT))
 
 
 def receive():
