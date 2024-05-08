@@ -2,7 +2,7 @@ POST http://localhost:5000/login
 Content-Type: application/json
 
 {
-  "username": "chanhlongdeptrai3@gmail.com",
+  "username": "chanhlongdeptrai6@gmail.com",
   "password": "longdeptrai"
 }
 
@@ -11,6 +11,7 @@ POST http://localhost:5000/signup
 Content-Type: application/json
 
 {
-  "username": "chanhlongdeptrai3@gmail.com",
-  "password": "longdeptrai"
+  "username": "chanhlongdeptrai6@gmail.com",
+  "password": "longdeptrai",
+  "nameaccount": "chanhlong6"
 }
