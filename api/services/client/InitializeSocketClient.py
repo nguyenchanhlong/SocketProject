@@ -16,6 +16,7 @@ sys.path.append(parent_directory)
 from settings import settings
 import socket
 from api.handlers.AuthenticationHandler.AuthHandle import AuthHandle
+from api.handlers.ActualUserHandler.UserHandle import UserHandle
 
 
 class SocketClient:
@@ -25,7 +26,7 @@ class SocketClient:
         print("Connected to server.")
 
         self.username = None
-        self.available_clients = {}  # Dictionary to store available clients (username: SocketClient object)
+        self.nickname = None
 
     @staticmethod
     def auth_token(access_token):
@@ -40,7 +41,8 @@ class SocketClient:
                     else:
                         # Decode the token using the bytes type for the secret key
                         sub = jwt.decode(token_bytes, settings.AUTH_SECRET_KEY.encode('utf-8'), algorithms=['HS256'])
-                        return sub, "Authenticated, login successful!!!"
+                        dict_string = {'sub': sub, 'message': "Authenticated, login successful!!!"}
+                        return dict_string
                 else:
                     break
             except Exception as e:
@@ -51,42 +53,33 @@ class SocketClient:
         while True:
             try:
                 data = self.client_socket.recv(1024).decode()
-                if data:
-                    if ":" in data:
-                        address_parts = data.split(":")
-                        if len(address_parts) == 2:
-                            nickname = address_parts[0].strip()
-                            message = address_parts[1].strip()
-                            print("Received from user ({}): {}".format(nickname, message))
-
+                if data == "NICK":
+                    self.client_socket.send(self.nickname.encode('utf-8'))
+                else:
+                    print(data)
             except Exception as e:
                 print("Error receiving message:", e)
                 break
 
-    def send_message(self, recipient=None):
+    def send_message(self):
         while True:
             try:
-                message = input("")
-                if recipient:
-                    message = f"{recipient}:{message}"
-                self.client_socket.sendall(message.encode())
+                message = f"{self.nickname}: {input('')}"
+                self.client_socket.send(message.encode('utf-8'))
 
             except Exception as e:
                 print("Error sending message:", e)
                 break
 
-    def list_clients(self):
-        print("Available clients:")
-        for username in self.available_clients.items():
-            print(username)
-
     def start(self):
         access_token = input("Please input the Access Token: ")
-        token = SocketClient.auth_token(access_token=access_token)
-        if token[1] == "Authenticated, login successful!!!":
-            self.username = token[0]['sub'].split()[0]
-            print("Authenticated, login successful to username: {}".format(self.username))
-            self.available_clients[self.username] = self  # Add self to available clients
+        dict_string = SocketClient.auth_token(access_token=access_token)
+
+        if dict_string['message'] == "Authenticated, login successful!!!":
+            user_info = UserHandle(username=dict_string['sub']['sub'].split()[0]).get_user_info()
+            self.nickname = user_info['nameaccount']
+            print("Authenticated, login successful to name account: {}".format(user_info['nameaccount']))
+
             send_thread = threading.Thread(target=self.send_message)
             receive_thread = threading.Thread(target=self.receive_messages)
             receive_thread.start()

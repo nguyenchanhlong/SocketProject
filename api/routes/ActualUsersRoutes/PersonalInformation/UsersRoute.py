@@ -39,22 +39,29 @@ def user_routes():
         data = request.json
         username = data.get('username')
         password = data.get('password')
+        nameaccount = data.get('nameaccount')
 
-        if not username or not password:
-            return jsonify({'message': 'Missing username or password'}), 400
-        else:
-            user_collection = UserHandle.db_con_user()
-            new_user = UserProperty(username=username, password=password)
-            user_dict = new_user.to_dict()
+        if not username or not password or not nameaccount:
+            return jsonify({'message': 'Missing username, password, or nameaccount'}), 400
 
-            # Insert the new user into the collection and get the insert result
-            insert_result = user_collection.insert_one(user_dict)
+        user_info = UserHandle(username=username).get_user_info()
 
-            # Add the string version of the ObjectId to the user_dict
-            user_dict['_id'] = str(insert_result.inserted_id)
-            print(user_dict)
-            # Return the dictionary representation as JSON
-            return jsonify(user_dict), 200
+        if user_info:
+            if user_info['username'] == username:
+                return jsonify({'message': 'User already exists'}), 400
+
+        user_collection = UserHandle.db_con_user()
+        new_user = UserProperty(username=username, password=password, nameaccount=nameaccount)
+        user_dict = new_user.to_dict()
+
+        # Insert the new user into the collection and get the insert result
+        insert_result = user_collection.insert_one(user_dict)
+
+        # Add the string version of the ObjectId to the user_dict
+        user_dict['_id'] = str(insert_result.inserted_id)
+
+        # Return the dictionary representation as JSON
+        return jsonify(user_dict), 200
 
     @app.route('/login', methods=['POST'])
     def login():
@@ -94,7 +101,8 @@ def user_routes():
             # Delete ObjectID in the first user_inf inf was response from database
             user_inf = {k: object_id_converter(v) if isinstance(v, ObjectId) else v for k, v in user_inf.items()}
             return jsonify(
-                {"User Name": user_inf['username'], "User Password": user_inf['password'],
+                {"Name Account": user_inf['nameaccount'], "User Name": user_inf['username'],
+                 "User Password": user_inf['password'],
                  "Access Token": auth_token_dict['authToken']}), 200
         else:
             return jsonify({'message': 'User account does not exist!!!'}), 401

@@ -13,6 +13,10 @@ import socket
 import threading
 from settings import settings
 
+"""
+    clients and nicknames have the same of index in the list.
+"""
+
 
 class SocketServer:
     def __init__(self):
@@ -23,47 +27,45 @@ class SocketServer:
         self.clients = []
         self.nicknames = []
 
-    def handle_client(self, client_socket, address):
-        print(f"Connected to {address}")
-        with client_socket:
-            self.clients.append((client_socket, address))
+    def handle_client(self, client_socket):
+        while True:
             try:
-                while True:
-                    data = client_socket.recv(1024).decode()
-                    if not data:
-                        print(f"Connection with {address} closed.")
-                        self.clients.remove((client_socket, address))
-                        break
-                    print(f"Received from {address}: {data}")
-                    nickname = self.send_and_receive_nickname(client_socket)
-
-                    self.send_to_other_clients(client_socket, data, nickname)
+                # Send message for all clients Broadcast...
+                data = client_socket.recv(1024).decode()
+                print(data)
+                self.send_to_other_clients(data)
             except Exception as e:
-                print(f"Error occurred with {address}: {e}")
-                self.clients.remove((client_socket, address))
+                # the index of client in list of clients
+                index = self.clients.index(client_socket)
+                self.clients.remove(client_socket)
+                client_socket.close()
+                nickname = self.nicknames[index]
+                self.send_to_other_clients(f'{nickname} left the chat!!!')
+                self.nicknames.remove(nickname)
+                break
 
-    def send_and_receive_nickname(self, client_socket):
-        client_socket.send("nickname".encode())
-        nickname = client_socket.recv(1024).decode()
-        self.nicknames.append(nickname)
-        print('Nickname of the client is {}'.format(nickname))
-        client_socket.send("Connected to the server!".encode('utf-8'))
-        return nickname
-
-    def send_to_other_clients(self, sender_socket, message, nickname):
-        for client_socket, client_address in self.clients:
-            if client_socket != sender_socket:
-                try:
-                    # Convert the tuple to a string and then encode
-                    client_address_str = f"{nickname}:{message}"
-                    client_socket.sendall(client_address_str.encode())
-                except Exception as e:
-                    print(f"Error sending to {client_address}: {e}")
+    def send_to_other_clients(self, message):
+        for client_socket in self.clients:
+            try:
+                client_socket.send(message.encode())
+            except Exception as e:
+                print("Error: ", e)
+                break
 
     def start(self):
         while True:
-            client_socket, address = self.server_socket.accept()
-            client_thread = threading.Thread(target=self.handle_client, args=(client_socket, address))
+            client, address = self.server_socket.accept()
+            print(f"Connected by: {str(address)}")
+
+            client.send("NICK".encode('utf-8'))
+            nickname = client.recv(1024).decode('utf-8')
+            self.nicknames.append(nickname)
+            self.clients.append(client)
+            print('Nickname of the client is {}'.format(nickname))
+
+            client.send("Connected to the server!".encode('utf-8'))
+            self.send_to_other_clients(f'{nickname} joined the chat!!!')
+            client_thread = threading.Thread(target=self.handle_client, args=(client,))
             client_thread.start()
 
 
