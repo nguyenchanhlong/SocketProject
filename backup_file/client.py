@@ -16,6 +16,7 @@ sys.path.append(parent_directory)
 from settings import settings
 import socket
 from api.handlers.AuthenticationHandler.AuthHandle import AuthHandle
+from api.handlers.ActualUserHandler.UserHandle import UserHandle
 
 
 class SocketClient:
@@ -25,7 +26,6 @@ class SocketClient:
         print("Connected to server.")
 
         self.username = None
-        self.available_clients = {}  # Dictionary to store available clients (username: SocketClient object)
 
     @staticmethod
     def auth_token(access_token):
@@ -40,7 +40,8 @@ class SocketClient:
                     else:
                         # Decode the token using the bytes type for the secret key
                         sub = jwt.decode(token_bytes, settings.AUTH_SECRET_KEY.encode('utf-8'), algorithms=['HS256'])
-                        return sub, "Authenticated, login successful!!!"
+                        dict_string = {'sub': sub, 'message': "Authenticated, login successful!!!"}
+                        return dict_string
                 else:
                     break
             except Exception as e:
@@ -75,18 +76,14 @@ class SocketClient:
                 print("Error sending message:", e)
                 break
 
-    def list_clients(self):
-        print("Available clients:")
-        for username in self.available_clients.items():
-            print(username)
-
     def start(self):
         access_token = input("Please input the Access Token: ")
-        token = SocketClient.auth_token(access_token=access_token)
-        if token[1] == "Authenticated, login successful!!!":
-            self.username = token[0]['sub'].split()[0]
-            print("Authenticated, login successful to username: {}".format(self.username))
-            self.available_clients[self.username] = self  # Add self to available clients
+        dict_string = SocketClient.auth_token(access_token=access_token)
+
+        if dict_string['message'] == "Authenticated, login successful!!!":
+            user_info = UserHandle(username=dict_string['sub']['sub'].split()[0]).get_user_info()
+            print("Authenticated, login successful to name account: {}".format(user_info['nameaccount']))
+
             send_thread = threading.Thread(target=self.send_message)
             receive_thread = threading.Thread(target=self.receive_messages)
             receive_thread.start()
