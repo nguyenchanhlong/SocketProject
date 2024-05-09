@@ -49,7 +49,7 @@ class SocketServer:
                 break
 
     def send_to_other_clients(self, message):
-        for client_socket in self.clients:
+        for client_socket, client_address in self.clients:
             try:
                 client_socket.send(message.encode())
             except Exception as e:
@@ -78,7 +78,7 @@ class SocketServer:
             client.send("NICK".encode('utf-8'))
             nickname = client.recv(1024).decode('utf-8')
             self.nicknames.append(nickname)
-            self.clients.append(client)
+            self.clients.append(client, address)
             print('Nickname of the client is {}'.format(nickname))
 
             client.send("Connected to the server!".encode('utf-8'))
