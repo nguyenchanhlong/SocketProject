@@ -27,6 +27,10 @@ class SocketServer:
         self.clients = []
         self.nicknames = []
 
+
+    """
+        Group chat
+    """
     def handle_client(self, client_socket):
         while True:
             try:
@@ -52,6 +56,20 @@ class SocketServer:
                 print("Error: ", e)
                 break
 
+    """
+        Private chat:
+            Client:
+                - host: localhost.
+                - port: specific port address (12345)
+                - nickname: specific nickname.
+            Client 1: Port: 55555
+            Client 2: Port: 55556
+            run main: 
+                - private room, group chat:
+                    + if choose private room:
+                        * input the port you want to connect to communicate.
+                - group chat:
+    """
     def start(self):
         while True:
             client, address = self.server_socket.accept()

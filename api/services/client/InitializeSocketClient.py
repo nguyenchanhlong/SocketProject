@@ -24,6 +24,7 @@ class SocketClient:
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect((settings.SERVER_HOST, settings.SERVER_PORT))
         print("Connected to server.")
+        print("gitlow ......")
 
         self.username = None
         self.nickname = None
