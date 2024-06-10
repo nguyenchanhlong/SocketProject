@@ -1,9 +1,10 @@
 # Socket Programming Project
+---
 ## Setup Developmen Enviroment
+---
 ### Installation docker for linux
 1. Install docker For Debian/Ubuntu or Debian-based
-
-'''
+```
 # update and install necessary tools
 sudo apt-get update
 sudo apt-get install \
@@ -23,4 +24,4 @@ echo \
 
 # Install docker
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
-'''
+```
