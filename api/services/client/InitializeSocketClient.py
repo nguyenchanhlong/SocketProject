@@ -31,7 +31,7 @@ class SocketClient:
         self.target_nickname = None
 
     @staticmethod
-    def auth_token(access_token):
+    def auth_token(access_token) -> dict[str, str]:
         auth_token = AuthHandle(access_token).get_access_token()
 
         while True:
