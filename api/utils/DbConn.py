@@ -9,7 +9,9 @@ class UserConnection:
 
     def connect_collection(self):
         database_connection = mongo_connection
-        database_connection_user: Collection = database_connection.get_collection(self.collection)
+        database_connection_user: Collection = database_connection.get_collection(
+            self.collection
+        )
         return database_connection_user
 
 
@@ -19,7 +21,9 @@ class AuthConnection:
 
     def connect_collection(self):
         database_connection = mongo_connection
-        database_connection_auth: Collection = database_connection.get_collection(self.collection)
+        database_connection_auth: Collection = database_connection.get_collection(
+            self.collection
+        )
         return database_connection_auth
 
 
