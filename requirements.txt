@@ -1,4 +1,6 @@
+pydantic-settings
+python-dotenv
+PyJWT
 jwt
 flask
-bson
 pymongo
