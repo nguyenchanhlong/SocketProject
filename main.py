@@ -7,11 +7,10 @@ import os
 current_directory = os.path.dirname(os.path.abspath(__file__))
 
 # Get the parent directory by going up multiple levels
-parent_directory = os.path.abspath(os.path.join(current_directory, '../../../'))
+parent_directory = os.path.abspath(os.path.join(current_directory, "../../../"))
 
 # Add the parent directory to the Python path
 sys.path.append(parent_directory)
-dir_path = os.path.dirname(__file__)
 
 
 def run_server():
@@ -24,15 +23,15 @@ def run_api():
     subprocess.run(["python", "UsersRoute.py"])
 
 
-# # Use threading to run both server and client concurrently
 if __name__ == "__main__":
-    server_thread = threading.Thread(target=run_server)
     api_thread = threading.Thread(target=run_api)
-    # Start the server and client threads
+    server_thread = threading.Thread(target=run_server)
     server_thread.start()
+    # Start the server thread first
     api_thread.start()
-
-    api_thread.join()
+    # Then start the API thread
     server_thread.join()
-
+    # Wait for the server thread to finish
+    api_thread.join()
+    # Wait for the API thread to finish
     print("Server and client have been initialized.")

@@ -24,10 +24,11 @@ class SocketClient:
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect((settings.SERVER_HOST, settings.SERVER_PORT))
         print("Connected to server.")
-        print("gitlow ......")
 
         self.username = None
         self.nickname = None
+        self.chat_mode = None
+        self.target_nickname = None
 
     @staticmethod
     def auth_token(access_token):
@@ -65,9 +66,11 @@ class SocketClient:
     def send_message(self):
         while True:
             try:
-                message = f"{self.nickname}: {input('')}"
+                if self.chat_mode == "private":
+                    message = f"/private {self.target_nickname} {input('')}"
+                else:
+                    message = f"{self.nickname}: {input('')}"
                 self.client_socket.send(message.encode('utf-8'))
-
             except Exception as e:
                 print("Error sending message:", e)
                 break
@@ -81,6 +84,20 @@ class SocketClient:
             self.nickname = user_info['nameaccount']
             print("Authenticated, login successful to name account: {}".format(user_info['nameaccount']))
 
+            self.client_socket.send(self.nickname.encode("utf-8"))
+            while True:
+                try:
+                    mode_prompt = self.client_socket.recv(1024).decode('utf-8')
+                    if mode_prompt == "private or group":
+                        self.chat_mode = input("Choose chat mode (private/group): ").strip().lower()
+                        self.client_socket.send(self.chat_mode.encode('utf-8'))
+                        if self.chat_mode == "private":
+                            self.target_nickname = input("Enter the nickname of the user you want to chat with: ")
+                        break  # Exit the loop after setting the chat mode and nickname
+                except Exception as e:
+                    print("Error: ", e)
+                    break  # Exit the loop in case of an error
+
             send_thread = threading.Thread(target=self.send_message)
             receive_thread = threading.Thread(target=self.receive_messages)
             receive_thread.start()
@@ -89,5 +106,7 @@ class SocketClient:
             print("Authentication failed.")
 
 
-client = SocketClient()
-client.start()
+if __name__ == "__main__":
+    client = SocketClient()
+    client.start()
+
