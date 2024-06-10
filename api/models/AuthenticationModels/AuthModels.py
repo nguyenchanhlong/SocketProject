@@ -1,6 +1,6 @@
 class AuthProperty:
-    def __init__(self, authToken):
-        self.authToken = authToken
+    def __init__(self, auth_token):
+        self.authToken = auth_token
 
     def to_dict(self):
         return {

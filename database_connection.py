@@ -6,11 +6,7 @@ from pymongo.collection import Collection
 from settings import settings
 
 
-def _connect_db(host: str,
-                port: int,
-                username: str,
-                password: str,
-                db: str) -> MongoClient[Mapping[str, Any] | Any]:
+def _connect_db(host: str, port: int, username: str, password: str, db: str):
     if username and password:
         mongo_uri = f"mongodb://{username}:{password}@{host}:{port}"
         conn = MongoClient(mongo_uri)

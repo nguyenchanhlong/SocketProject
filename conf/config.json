@@ -1,6 +1,0 @@
-{
-  "SocketServer": {
-    "HOST": "localhost",
-    "PORT": 65432
-  }
-}
