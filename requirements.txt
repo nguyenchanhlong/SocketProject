@@ -1,6 +1,5 @@
 pydantic-settings
 python-dotenv
 PyJWT
-jwt
 flask
 pymongo
