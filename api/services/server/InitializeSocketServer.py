@@ -1,5 +1,13 @@
 import sys
 import os
+# Get the absolute path of the directory containing InitializeSocketClient.py
+current_directory = os.path.dirname(os.path.abspath(__file__))
+
+# Get the parent directory by going up multiple levels
+parent_directory = os.path.abspath(os.path.join(current_directory, '../../../'))
+
+# Add the parent directory to the Python path
+sys.path.append(parent_directory)
 import socket
 import threading
 from settings import settings
