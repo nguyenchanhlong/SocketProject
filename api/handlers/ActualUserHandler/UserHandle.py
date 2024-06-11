@@ -1,4 +1,4 @@
-from api.utils.DbConn import user_connected
+from api.utils.db_conn import user_connected
 
 
 class UserHandle:
