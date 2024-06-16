@@ -1,1 +1,1 @@
-from .AuthModels import *
+from .auth_models import *

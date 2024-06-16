@@ -3,7 +3,7 @@ import os
 import threading
 import jwt
 
-# Get the absolute path of the directory containing InitializeSocketClient.py
+# Get the absolute path of the directory containing initialize_socket_client.py
 current_directory = os.path.dirname(os.path.abspath(__file__))
 
 # Get the parent directory by going up multiple levels
@@ -15,8 +15,8 @@ sys.path.append(parent_directory)
 # Now you can import settings
 from settings import settings
 import socket
-from api.handlers.AuthenticationHandler.AuthHandle import AuthHandle
-from api.handlers.ActualUserHandler.UserHandle import UserHandle
+from api.handlers.AuthenticationHandler.auth_handle import AuthHandle
+from api.handlers.ActualUserHandler.user_handle import UserHandle
 
 
 class SocketClient:

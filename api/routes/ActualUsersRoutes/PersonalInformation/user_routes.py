@@ -7,7 +7,7 @@ from bson import ObjectId
 import sys
 import os
 
-# Get the absolute path of the directory containing InitializeSocketClient.py
+# Get the absolute path of the directory containing initialize_socket_client.py
 current_directory = os.path.dirname(os.path.abspath(__file__))
 
 # Get the parent directory by going up multiple levels
@@ -16,10 +16,10 @@ parent_directory = os.path.abspath(os.path.join(current_directory, "../../../../
 # Add the parent directory to the Python path
 sys.path.append(parent_directory)
 
-from api.models.ActualUserModels.UserModels import UserProperty
-from api.models.AuthenticationModels.AuthModels import AuthProperty
-from api.handlers.ActualUserHandler.UserHandle import UserHandle
-from api.handlers.AuthenticationHandler.AuthHandle import AuthHandle
+from api.models.ActualUserModels.user_models import UserProperty
+from api.models.AuthenticationModels.auth_models import AuthProperty
+from api.handlers.ActualUserHandler.user_handle import UserHandle
+from api.handlers.AuthenticationHandler.auth_handle import AuthHandle
 
 from settings import settings
 

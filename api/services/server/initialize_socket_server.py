@@ -1,6 +1,6 @@
 import sys
 import os
-# Get the absolute path of the directory containing InitializeSocketClient.py
+# Get the absolute path of the directory containing initialize_socket_client.py
 current_directory = os.path.dirname(os.path.abspath(__file__))
 
 # Get the parent directory by going up multiple levels

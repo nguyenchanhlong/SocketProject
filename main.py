@@ -3,7 +3,7 @@ import subprocess
 import sys
 import os
 
-# Get the absolute path of the directory containing InitializeSocketClient.py
+# Get the absolute path of the directory containing initialize_socket_client.py
 current_directory = os.path.dirname(os.path.abspath(__file__))
 
 # Get the parent directory by going up multiple levels
@@ -15,12 +15,12 @@ sys.path.append(parent_directory)
 
 def run_server():
     os.chdir("./api/services/server")
-    subprocess.run(["python", "InitializeSocketServer.py"])
+    subprocess.run(["python", "initialize_socket_server.py"])
 
 
 def run_api():
     os.chdir("../../../api/routes/ActualUsersRoutes/PersonalInformation")
-    subprocess.run(["python", "UsersRoute.py"])
+    subprocess.run(["python", "user_routes.py"])
 
 
 if __name__ == "__main__":
